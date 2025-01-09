@@ -1,14 +1,11 @@
-//import java.awt.image.BufferedImage;
-
 public class Enemy {
     private int row;
     private int col;
-    private char tipo; // 'Z' per Zombie, 'S' per Scheletro, ecc.
+    private char tipo; // 'Z' per Zombie, 'S' per Scheletro, V per Vampiro.
     private int vita;
     private int danni;
-    //private BufferedImage sprite;
 
-    public Enemy(int row, int col, char tipo, int vita, int danni /*, BufferedImage sprite*/) {
+    public Enemy(int row, int col, char tipo, int vita, int danni) {
         this.row = row;
         this.col = col;
         this.tipo = tipo;
