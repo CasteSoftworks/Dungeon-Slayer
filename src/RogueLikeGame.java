@@ -31,8 +31,10 @@ public class RogueLikeGame extends JPanel implements KeyListener {
 
     /** La posizione del giocatore */
     private int playerRow, playerCol;
+    private BufferedImage playerImage;
     /** La posizione del portale */
     private int portalRow, portalCol;
+    private BufferedImage portalImage;
 
     /** La lista degli nemici */
     private List<Enemy> enemies = new ArrayList<>();
@@ -90,6 +92,8 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             zombieImage = ImageIO.read(new File("src/icone/zombie.png"));
             skeletonImage = ImageIO.read(new File("src/icone/scheletro.png"));
             vampireImage = ImageIO.read(new File("src/icone/vampiro.png"));
+            playerImage = ImageIO.read(new File("src/icone/eroe.png"));
+            portalImage = ImageIO.read(new File("src/icone/scale.png"));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Errore nel caricamento delle immagini!");
@@ -443,12 +447,10 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                     g.fillRect(col * dim, row * dim, dim, dim);
                 } else if (row == playerRow && col == playerCol) {
                     // Disegnare il giocatore
-                    g.setColor(Color.MAGENTA);
-                    g.fillRect(col * dim, row * dim, dim, dim);
+                    g.drawImage(playerImage, col*dim, row*dim,dim,dim, this);
                 } else if (row == portalRow && col == portalCol) {
                     // Disegnare il portale
-                    g.setColor(Color.CYAN);
-                    g.fillRect(col * dim, row * dim, dim, dim);
+                    g.drawImage(portalImage, col*dim, row*dim,dim,dim, this);
                 } else {
                     // Disegnare il pavimento o altri oggetti
                     boolean isEnemy = false;
