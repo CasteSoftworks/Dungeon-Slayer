@@ -14,10 +14,7 @@ RougeLikeGame è un gioco di avventura roguelike dove i giocatori esplorano dung
 Per ora usa VSCode e javac -d bin src/*.java java -cp bin App
 
 ### Utilizzo
-Per avviare il gioco, eseguire:
-```bash
-./start_game.sh
-```
+Vedi Installazione
 
 ### Contribuire
 Se desideri contribuire al progetto, per favore segui questi passaggi:
