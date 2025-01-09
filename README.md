@@ -1,18 +1,33 @@
-## Getting Started
+## RougeLikeGame
+Benvenuti nel progetto **RougeLikeGame**!
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+### Descrizione
+RougeLikeGame è un gioco di avventura roguelike dove i giocatori esplorano dungeon generati proceduralmente, combattono mostri e raccolgono tesori.
 
-## Folder Structure
+### Caratteristiche
+- Dungeon generati proceduralmente
+- Combattimenti a turni
+- Varietà di mostri e oggetti
+- (WIP) Sistema di progressione del personaggio
 
-The workspace contains two folders by default, where:
+### Installazione
+Per ora usa VSCode e javac -d bin src/*.java java -cp bin App
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
+### Utilizzo
+Per avviare il gioco, eseguire:
+```bash
+./start_game.sh
+```
 
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
+### Contribuire
+Se desideri contribuire al progetto, per favore segui questi passaggi:
+1. Fai un fork del repository
+2. Crea un nuovo branch (`git checkout -b feature/nome-feature`)
+3. Fai commit delle tue modifiche (`git commit -am 'Aggiungi nuova feature'`)
+4. Fai push del branch (`git push origin feature/nome-feature`)
+5. Apri una Pull Request
 
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
+### Licenza
+Questo progetto è distribuito sotto la licenza MIT. Vedi il file `LICENSE` per maggiori dettagli.
 
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+Buon divertimento!
