@@ -15,6 +15,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     /** La larghezza del frame */
     private final int width;
     /** La altezza del frame */
+    @SuppressWarnings("unused")
     private final int height;
     /** Il numero di righe della mappa */
     private final int rows;
@@ -32,9 +33,19 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     /** La posizione del giocatore */
     private int playerRow, playerCol;
     private BufferedImage playerImage;
+    private int armor = 0;  // Numero di colpi che il giocatore può ignorare
+    private int weaponDamage = 0;  // Danno inflitto dall'arma
+    private int healAmount = 0;  // Salute da curare
+
     /** La posizione del portale */
     private int portalRow, portalCol;
     private BufferedImage portalImage;
+
+    private List<Item> items = new ArrayList<>();
+    private ItemManager gestoreOggetti;
+    /*private BufferedImage armorImage;
+    private BufferedImage weaponImage;
+    private BufferedImage healthImage;*/
 
     /** La lista degli nemici */
     private List<Enemy> enemies = new ArrayList<>();
@@ -75,6 +86,8 @@ public class RogueLikeGame extends JPanel implements KeyListener {
 
         this.gestoreNemici = new EnemyManager();
 
+        this.gestoreOggetti = new ItemManager();
+
         setPreferredSize(new Dimension(cols * dim, rows * dim));
         setBackground(Color.BLACK);
         setFocusable(true);
@@ -84,6 +97,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         generateMap();
         placePlayer();
         placePortal();
+        placeItems();
         placeEnemies();
     }
 
@@ -238,6 +252,31 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                 portalRow = row;
                 portalCol = col;
                 break;
+            }
+        }
+    }
+
+    private void placeItems() {
+        items = gestoreOggetti.generaOggetti(map, level);
+    }
+
+    private void handleItemPickup() {
+        for (Item item : items) {
+            if (item.getRow() == playerRow && item.getCol() == playerCol) {
+                switch (item.getTipo()) {
+                    case 'W': // Oggetto arma
+                        weaponDamage += 4; // Aumenta il danno dell'arma
+                        break;
+                    case 'A': // Oggetto armatura
+                        armor += 4; // Ignora 4 colpi nemici
+                        break;
+                    case 'H': // Oggetto salute
+                        playerHealth += 10; // Cura il giocatore di 10 danni
+                        if (playerHealth > 100) playerHealth = 100; // La salute non supera 100
+                        break;
+                }
+                items.remove(item); // Rimuove l'oggetto dalla mappa dopo che è stato raccolto
+                break; // Esci dopo aver raccolto l'oggetto
             }
         }
     }
@@ -452,21 +491,37 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                     // Disegnare il portale
                     g.drawImage(portalImage, col*dim, row*dim,dim,dim, this);
                 } else {
-                    // Disegnare il pavimento o altri oggetti
                     boolean isEnemy = false;
-                    for (Enemy nemico : gestoreNemici.getNemici()) {
-                        int nemicoRow = nemico.getRow();
-                        int nemicoCol = nemico.getCol();
-                        if (nemico.getTipo() == 'Z') {
-                            g.drawImage(zombieImage, nemicoCol * dim, nemicoRow * dim, dim, dim, this);
-                        } else if (nemico.getTipo() == 'S') {
-                            g.drawImage(skeletonImage, nemicoCol * dim, nemicoRow * dim, dim, dim, this);
-                        }else if (nemico.getTipo() == 'V') {
-                            g.drawImage(vampireImage, nemicoCol * dim, nemicoRow * dim, dim, dim, this);
+                    for (Enemy enemy : gestoreNemici.getNemici()) {
+                        if (enemy.getRow() == row && enemy.getCol() == col) {
+                            isEnemy = true;
+                            if (enemy.getTipo() == 'Z') {
+                                g.drawImage(zombieImage, col * dim, row * dim, dim, dim, this);
+                            } else if (enemy.getTipo() == 'S') {
+                                g.drawImage(skeletonImage, col * dim, row * dim, dim, dim, this);
+                            } else if (enemy.getTipo() == 'V') {
+                                g.drawImage(vampireImage, col * dim, row * dim, dim, dim, this);
+                            }
+                            break;
                         }
-                        
                     }
-                    if (!isEnemy) {
+                    boolean isItem = false;
+                    for (Item item : items) {
+                        if (item.getRow() == row && item.getCol() == col) {
+                            isItem = true;
+                            if (item.getTipo() == 'H') {
+                                g.setColor(Color.RED); // Oggetto salute
+                                g.fillRect(col * dim, row * dim, dim, dim);
+                            } else if (item.getTipo() == 'A') {
+                                g.setColor(Color.BLUE); // Oggetto armatura
+                                g.fillRect(col * dim, row * dim, dim, dim);
+                            } else if (item.getTipo() == 'W') {
+                                g.setColor(Color.YELLOW); // Oggetto arma
+                                g.fillRect(col * dim, row * dim, dim, dim);
+                            }
+                        }
+                    }
+                    if (!isEnemy && !isItem) {
                         g.setColor(floorColor);
                         g.fillRect(col * dim, row * dim, dim, dim);  // Riempie il pavimento con il colore bianco
                     }
@@ -519,9 +574,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             case KeyEvent.VK_RIGHT -> newCol++;
             case KeyEvent.VK_SPACE -> {
                 if (playerRow == portalRow && playerCol == portalCol) {
-                    nextLevel(); // Avanza al livello successivo
-                    return;
-                }else{
+                    nextLevel();
                     return;
                 }
             }
@@ -532,6 +585,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             playerRow = newRow;
             playerCol = newCol;
 
+            handleItemPickup();  // Controlla se il giocatore ha raccolto un oggetto
             moveEnemies();
             if (checkGameOver()) gameOver = true;
         }

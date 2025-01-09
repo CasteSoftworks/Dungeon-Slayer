@@ -6,7 +6,9 @@ import javax.swing.*;
 
 public class RogueLikeCombat extends JPanel implements KeyListener {
     private final RogueLikeGame game;
+
     private int playerHealth;
+    private int playerDmg = 1;
 
     private final Enemy enemy;
     private int enemyHealth;
@@ -54,7 +56,7 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("Monospaced", Font.BOLD, 24));
-        g.drawString("Enemy: " + enemyHealth, 50, 100);
+        g.drawString(enemy.getTipo()+": " + enemyHealth, 50, 100);
         g.drawString("Player: " + playerHealth, 250, 100);
 
         if (enemyRolled) {
@@ -65,11 +67,13 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
             g.drawString(String.valueOf(playerRoll), 290, 200);
         }
 
-        if (!playerRolled || !enemyRolled) {
-            g.drawString("SPACEBAR", 100, 300);
-        } else {
-            g.drawString("SPACEBAR", 100, 300);
-        }
+        FontMetrics fm = g.getFontMetrics();
+        String text = "SPACEBAR";
+        int textWidth = fm.stringWidth(text);
+        int x = (getWidth() - textWidth) / 2;
+        int y = 300;
+
+        g.drawString(text, x, y);
     }
 
     @Override
@@ -87,9 +91,9 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
             } else {
                 // Apply damage
                 if (playerRoll > enemyRoll) {
-                    enemyHealth--;
+                    enemyHealth-=playerDmg;
                 } else if (enemyRoll > playerRoll) {
-                    playerHealth--;
+                    playerHealth-=enemyDmg;
                 }
 
                 // Reset rolls for next round
