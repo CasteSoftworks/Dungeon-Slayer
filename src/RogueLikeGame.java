@@ -8,10 +8,8 @@ import javax.swing.*;
 
 public class RogueLikeGame extends JPanel implements KeyListener {
     /** La larghezza del frame */
-    @SuppressWarnings("unused")
     private final int width;
     /** La altezza del frame */
-    @SuppressWarnings("unused")
     private final int height;
     /** Il numero di righe della mappa */
     private final int rows;
@@ -30,7 +28,8 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     private int portalRow, portalCol;
 
     /** La lista degli nemici */
-    private final List<int[]> enemies = new ArrayList<>();
+    private List<Enemy> enemies = new ArrayList<>();
+    private EnemyManager gestoreNemici;
 
     /** La booleana che indica se il gioco è finito */
     private boolean gameOver = false;
@@ -40,7 +39,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     private int level = 1;
 
     /** La salute del giocatore */
-    private int playerHealth = 3;
+    private int playerHealth = 100;
 
     /** Inizializzazione di Combat */
     private RogueLikeCombat combat;
@@ -62,10 +61,13 @@ public class RogueLikeGame extends JPanel implements KeyListener {
 
         this.map = new char[rows][cols];
 
+        this.gestoreNemici = new EnemyManager();
+
         setPreferredSize(new Dimension(cols * 12, rows * 12));
         setBackground(Color.BLACK);
         setFocusable(true);
         addKeyListener(this);
+
         generateMap();
         placePlayer();
         placePortal();
@@ -80,8 +82,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         generateMap();
         placePlayer();
         placePortal();
+        gestoreNemici.generaNemici(map, level);
         placeEnemies();
-        playerHealth = 3; // Ripristina la salute del giocatore
+        playerHealth = 100; // Ripristina la salute del giocatore
         gameOver = false; // Ripristina lo stato di fine partita
         gameWin = false;  // Ripristina lo stato di vittoria
         level++; // Incrementa il livello
@@ -217,24 +220,15 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * Il metodo per posizionare i nemici
      */
     private void placeEnemies() {
-        int enemyCount = random.nextInt(4) + 2; // Da 2 a 5 nemici
-        for (int i = 0; i < enemyCount; i++) {
-            while (true) {
-                int row = random.nextInt(rows);
-                int col = random.nextInt(cols);
-                if (map[row][col] == '.' && (row != playerRow || col != playerCol)) {
-                    enemies.add(new int[]{row, col});
-                    break;
-                }
-            }
-        }
+        enemies=gestoreNemici.generaNemici(map, level);
     }
+    
 
     /**
      * Il metodo per muovere i nemici nella mappa
      */
     private void moveEnemies() {
-        for (int[] enemy : enemies) {
+        for (Enemy enemy : enemies) {
             if (canSeePlayer(enemy)) {
                 moveTowardPlayer(enemy);
             } else {
@@ -249,9 +243,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * @param enemy
      * @return true se il nemico può vedere il giocatore, false altrimenti
      */
-    private boolean canSeePlayer(int[] enemy) {
-        int enemyRow = enemy[0];
-        int enemyCol = enemy[1];
+    private boolean canSeePlayer(Enemy enemy) {
+        int enemyRow = enemy.getRow();
+        int enemyCol = enemy.getCol();
 
         // Calcola la distanza euclidea
         int dx = playerCol - enemyCol;
@@ -312,21 +306,21 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * 
      * @param enemy il nemico da muovere
      */
-    private void moveTowardPlayer(int[] enemy) {
-        int dx = playerCol - enemy[1];
-        int dy = playerRow - enemy[0];
+    private void moveTowardPlayer(Enemy enemy) {
+        int dx = playerCol - enemy.getCol();
+        int dy = playerRow - enemy.getRow();
 
         if (Math.abs(dx) > Math.abs(dy)) { // Movimento orizzontale
-            if (dx > 0 && map[enemy[0]][enemy[1] + 1] == '.') {
-                enemy[1]++;
-            } else if (dx < 0 && map[enemy[0]][enemy[1] - 1] == '.') {
-                enemy[1]--;
+            if (dx > 0 && map[enemy.getRow()][enemy.getCol() + 1] == '.') {
+                enemy.updateCol(+1);
+            } else if (dx < 0 && map[enemy.getRow()][enemy.getCol() - 1] == '.') {
+                enemy.updateCol(-1);
             }
         } else { // Movimento verticale
-            if (dy > 0 && map[enemy[0] + 1][enemy[1]] == '.') {
-                enemy[0]++;
-            } else if (dy < 0 && map[enemy[0] - 1][enemy[1]] == '.') {
-                enemy[0]--;
+            if (dy > 0 && map[enemy.getRow() + 1][enemy.getCol()] == '.') {
+                enemy.updateRow(+1);
+            } else if (dy < 0 && map[enemy.getRow() - 1][enemy.getCol()] == '.') {
+                enemy.updateRow(-1);
             }
         }
     }
@@ -336,18 +330,18 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * 
      * @param enemy il nemico da muovere
      */
-    private void moveRandomly(int[] enemy) {
+    private void moveRandomly(Enemy enemy) {
         // Movimento casuale in una delle 4 direzioni
         int[] directions = {-1, 1, 0, 0};
         int[] rowOffsets = {0, 0, -1, 1};
 
         int direction = random.nextInt(4);
-        int newRow = enemy[0] + directions[direction];
-        int newCol = enemy[1] + rowOffsets[direction];
+        int newRow = enemy.getRow() + directions[direction];
+        int newCol = enemy.getCol() + rowOffsets[direction];
 
         if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && map[newRow][newCol] == '.') {
-            enemy[0] = newRow;
-            enemy[1] = newCol;
+            enemy.setRow(newRow);
+            enemy.setCol(newCol);
         }
     }
 
@@ -357,8 +351,8 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * @return true se il gioco è finito, false altrimenti
      */
     private boolean checkGameOver() {
-        for (int[] enemy : enemies) {
-            if (enemy[0] == playerRow && enemy[1] == playerCol) {
+        for (Enemy enemy : enemies) {
+            if (enemy.getRow() == playerRow && enemy.getCol() == playerCol) {
                 startCombat(enemy);
                 return false; // Interrompi per il combattimento
             }
@@ -371,7 +365,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * 
      * @param enemy il nemico con cui combattere
      */
-    private void startCombat(int[] enemy) {
+    private void startCombat(Enemy enemy) {
         combat = new RogueLikeCombat(this, playerHealth, enemy);
         inCombat = true;
         JFrame combatFrame = new JFrame("Combat");
@@ -389,12 +383,13 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * @param newPlayerHealth la nuova salute del giocatore
      * @param defeatedEnemy il nemico sconfitto
      */
-    void endCombat(boolean playerWon, int newPlayerHealth, int[] defeatedEnemy) {
+    void endCombat(boolean playerWon, int newPlayerHealth, Enemy defeatedEnemy) {
         playerHealth = newPlayerHealth;
         inCombat = false;
 
         if (playerWon) {
             enemies.remove(defeatedEnemy);
+            gestoreNemici.rimuoviNemico(defeatedEnemy);
         } else {
             gameOver = true;
         }
@@ -434,13 +429,17 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                 } else {
                     // Disegnare il pavimento o altri oggetti
                     boolean isEnemy = false;
-                    for (int[] enemy : enemies) {
-                        if (row == enemy[0] && col == enemy[1]) {
+                    for (Enemy nemico : gestoreNemici.getNemici()) {
+                        int nemicoRow = nemico.getRow();
+                        int nemicoCol = nemico.getCol();
+                        if (nemico.getTipo() == 'Z') {
                             g.setColor(Color.GREEN);
-                            g.fillRect(col * 12, row * 12, 12, 12);
-                            isEnemy = true;
-                            break;
+                        } else if (nemico.getTipo() == 'S') {
+                            g.setColor(Color.RED);
+                        }else if (nemico.getTipo() == 'V') {
+                            g.setColor(Color.BLACK);
                         }
+                        g.fillRect(nemicoCol * 12, nemicoRow * 12, 12, 12);
                     }
                     if (!isEnemy) {
                         g.setColor(Color.WHITE);

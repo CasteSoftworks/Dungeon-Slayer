@@ -7,18 +7,24 @@ import javax.swing.*;
 public class RogueLikeCombat extends JPanel implements KeyListener {
     private final RogueLikeGame game;
     private int playerHealth;
-    private final int[] enemy;
-    private int enemyHealth = 1;
+
+    private final Enemy enemy;
+    private int enemyHealth;
+    private int enemyDmg;
+
     private boolean playerRolled = false;
     private boolean enemyRolled = false;
     private int playerRoll = 0;
     private int enemyRoll = 0;
     private final Random random = new Random();
 
-    public RogueLikeCombat(RogueLikeGame game, int playerHealth, int[] enemy) {
+    public RogueLikeCombat(RogueLikeGame game, int playerHealth, Enemy enemy) {
         this.game = game;
         this.playerHealth = playerHealth;
+        
         this.enemy = enemy;
+        this.enemyHealth = enemy.getVita();
+        this.enemyDmg = enemy.getDanni();
 
         setPreferredSize(new Dimension(400, 400));
         setBackground(Color.BLACK);
