@@ -1,9 +1,14 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class RogueLikeGame extends JPanel implements KeyListener {
@@ -15,6 +20,8 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     private final int rows;
     /** Il numero di colonne della mappa */
     private final int cols;
+
+    private final int dim=24;
 
     /** La mappa del gioco */
     private final char[][] map;
@@ -30,6 +37,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     /** La lista degli nemici */
     private List<Enemy> enemies = new ArrayList<>();
     private EnemyManager gestoreNemici;
+    private BufferedImage zombieImage;
+    private BufferedImage skeletonImage;
+    private BufferedImage vampireImage;
 
     /** La booleana che indica se il gioco è finito */
     private boolean gameOver = false;
@@ -56,22 +66,34 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     public RogueLikeGame(int width, int height) {
         this.width = width;
         this.height = height;
-        this.rows =  height/ 12;
-        this.cols =  width / 12;
+        this.rows =  height/ dim;
+        this.cols =  width / dim;
 
         this.map = new char[rows][cols];
 
         this.gestoreNemici = new EnemyManager();
 
-        setPreferredSize(new Dimension(cols * 12, rows * 12));
+        setPreferredSize(new Dimension(cols * dim, rows * dim));
         setBackground(Color.BLACK);
         setFocusable(true);
         addKeyListener(this);
 
+        loadImages();
         generateMap();
         placePlayer();
         placePortal();
         placeEnemies();
+    }
+
+    private void loadImages() {
+        try {
+            zombieImage = ImageIO.read(new File("src/icone/zombie.png"));
+            skeletonImage = ImageIO.read(new File("src/icone/scheletro.png"));
+            vampireImage = ImageIO.read(new File("src/icone/vampiro.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Errore nel caricamento delle immagini!");
+        }
     }
 
     /**
@@ -405,27 +427,28 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         super.paintComponent(g);
         g.setColor(Color.WHITE);
 
-        Font font = new Font("Monospaced", Font.PLAIN, 12);
+        Font font = new Font("Monospaced", Font.PLAIN, dim);
         g.setFont(font);
         FontMetrics metrics = g.getFontMetrics(font);
 
         // Impostiamo il colore per i muri
         Color wallColor = new Color(64, 64, 64); // Grigio scuro
+        Color floorColor = new Color(128, 128, 128); // Grigio
 
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if (map[row][col] == '#') {
                     // Se la cella è un muro, la riempiamo con il colore grigio
                     g.setColor(wallColor);
-                    g.fillRect(col * 12, row * 12, 12, 12);
+                    g.fillRect(col * dim, row * dim, dim, dim);
                 } else if (row == playerRow && col == playerCol) {
                     // Disegnare il giocatore
                     g.setColor(Color.MAGENTA);
-                    g.fillRect(col * 12, row * 12, 12, 12);
+                    g.fillRect(col * dim, row * dim, dim, dim);
                 } else if (row == portalRow && col == portalCol) {
                     // Disegnare il portale
                     g.setColor(Color.CYAN);
-                    g.fillRect(col * 12, row * 12, 12, 12);
+                    g.fillRect(col * dim, row * dim, dim, dim);
                 } else {
                     // Disegnare il pavimento o altri oggetti
                     boolean isEnemy = false;
@@ -433,31 +456,33 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                         int nemicoRow = nemico.getRow();
                         int nemicoCol = nemico.getCol();
                         if (nemico.getTipo() == 'Z') {
-                            g.setColor(Color.GREEN);
+                            g.drawImage(zombieImage, nemicoCol * dim, nemicoRow * dim, dim, dim, this);
                         } else if (nemico.getTipo() == 'S') {
-                            g.setColor(Color.RED);
+                            g.drawImage(skeletonImage, nemicoCol * dim, nemicoRow * dim, dim, dim, this);
                         }else if (nemico.getTipo() == 'V') {
-                            g.setColor(Color.BLACK);
+                            g.drawImage(vampireImage, nemicoCol * dim, nemicoRow * dim, dim, dim, this);
                         }
-                        g.fillRect(nemicoCol * 12, nemicoRow * 12, 12, 12);
+                        
                     }
                     if (!isEnemy) {
-                        g.setColor(Color.WHITE);
-                        g.fillRect(col * 12, row * 12, 12, 12);  // Riempie il pavimento con il colore bianco
+                        g.setColor(floorColor);
+                        g.fillRect(col * dim, row * dim, dim, dim);  // Riempie il pavimento con il colore bianco
                     }
                 }
             }
         }
 
         // Disegno della barra delle informazioni in alto
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("Monospaced", Font.BOLD, 12));
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Monospaced", Font.BOLD, dim));
         g.drawString("Vita: " + playerHealth, 10, 20); // Mostra la vita in alto a sinistra
-        g.drawString("Livello: " + level, width - 100, 20); // Mostra il livello in alto a destra
+        String levelText = "Livello: " + level;
+        int levelTextWidth = metrics.stringWidth(levelText);
+        g.drawString(levelText, width - levelTextWidth - 10, 20); // Mostra il livello in alto a destra considerando la dimensione del testo
 
         if (gameOver || gameWin) {
             g.setColor(Color.BLACK);
-            g.fillRect(0, 0, cols * 12, rows * 12);
+            g.fillRect(0, 0, cols * dim, rows * dim);
 
             if (gameOver) {
                 g.setColor(Color.RED);
@@ -467,8 +492,8 @@ public class RogueLikeGame extends JPanel implements KeyListener {
 
             g.setFont(new Font("Monospaced", Font.BOLD, 42));
             String message = gameOver ? "GAME OVER - LEVEL "+level : "GAME WIN";
-            int x = (cols * 12 - 3 * metrics.stringWidth(message)) / 2;
-            int y = (rows * 12) / 2;
+            int x = (cols * dim - 3 * metrics.stringWidth(message)) / 2;
+            int y = (rows * dim) / 2;
             g.drawString(message, x, y);
         }
     }

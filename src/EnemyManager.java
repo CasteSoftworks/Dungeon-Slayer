@@ -31,6 +31,7 @@ public class EnemyManager {
                     int danniNemico = determinaDanniNemico(tipoNemico);
 
                     if (tipoNemico != ' ') {
+                        
                         nemici.add(new Enemy(row, col, tipoNemico, vitanemico, danniNemico));
                         break;
                     }

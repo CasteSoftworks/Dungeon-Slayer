@@ -2,8 +2,8 @@ import javax.swing.JFrame;
 
 public class GameLauncher {
     public void launch() {
-        int width = 600;  // Larghezza della finestra
-        int height = 400; // Altezza della finestra
+        int width = 800;  // Larghezza della finestra
+        int height = 600; // Altezza della finestra
 
         JFrame frame = new JFrame("Dungeon Slayer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

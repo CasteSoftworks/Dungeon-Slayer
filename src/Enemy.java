@@ -1,16 +1,20 @@
+//import java.awt.image.BufferedImage;
+
 public class Enemy {
     private int row;
     private int col;
     private char tipo; // 'Z' per Zombie, 'S' per Scheletro, ecc.
     private int vita;
     private int danni;
+    //private BufferedImage sprite;
 
-    public Enemy(int row, int col, char tipo, int vita, int danni) {
+    public Enemy(int row, int col, char tipo, int vita, int danni /*, BufferedImage sprite*/) {
         this.row = row;
         this.col = col;
         this.tipo = tipo;
         this.vita = vita;
         this.danni = danni;
+        //this.sprite = sprite;
     }
 
     public int getRow() {
@@ -52,6 +56,10 @@ public class Enemy {
     public void setTipo(char tipo) {
         this.tipo = tipo;
     }
+
+    /*public BufferedImage getSprite() {
+        return sprite;
+    }*/
 
     public void updateRow(int var) {
         this.row+=var; 
