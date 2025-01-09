@@ -450,6 +450,12 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             }
         }
 
+        // Disegno della barra delle informazioni in alto
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Monospaced", Font.BOLD, 12));
+        g.drawString("Vita: " + playerHealth, 10, 20); // Mostra la vita in alto a sinistra
+        g.drawString("Livello: " + level, width - 100, 20); // Mostra il livello in alto a destra
+
         if (gameOver || gameWin) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, cols * 12, rows * 12);
