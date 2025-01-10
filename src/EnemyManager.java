@@ -140,8 +140,16 @@ public class EnemyManager {
                 return 1+(livello/10);
             case 'S':
                 return 2+(livello/10);
+            case 'G':
+                return 3+(livello/10);
+            case 'W':
+                return 4+(livello/10);
             case 'V':
                 return 8+(livello/10);
+            case 'L':
+                return 1+(livello/5);
+            case 'D':
+                return 10+(livello/10);
             default:
                 return 0;
         }
@@ -164,8 +172,16 @@ public class EnemyManager {
                 return 1+(livello/10);
             case 'S':
                 return 2+(livello/10);
-            case 'V':
+            case 'G':
+                return 2+(livello/10);
+            case 'W':
                 return 3+(livello/10);
+            case 'V':
+                return 4+(livello/10);
+            case 'L':
+                return 2+(livello/5);
+            case 'D':
+                return 5+(livello/10);
             default:
                 return 0;
         }
@@ -188,8 +204,16 @@ public class EnemyManager {
                 return 1+(livello/10);
             case 'S':
                 return 2+(livello/10);
+            case 'G':
+                return 2+(livello/10);
+            case 'W':
+                return 3+(livello/10);
             case 'V':
                 return 5+(livello/10);
+            case 'L':
+                return 10+(livello/5);
+            case 'D':
+                return 20+(livello/10);
             default:
                 return 0;
         }
