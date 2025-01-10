@@ -48,7 +48,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         private int playerLevel = 1;
         /** La quantità di punti vita curabili */
         @SuppressWarnings("unused")
-        private int healAmount = 0;
+        private final int healAmount = 0;
     
         /** La posizione del portale */
         private int portalRow, portalCol;
@@ -58,7 +58,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         /** La lista degli oggetti */
         private List<Item> items = new ArrayList<>();
         /** Inizializzazione del gestore oggetti */
-        private ItemManager gestoreOggetti;
+        private final ItemManager gestoreOggetti;
         /** 
          * Le immagini degli oggetti
          * 
@@ -75,7 +75,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         /** La lista degli nemici */
         private List<Enemy> enemies = new ArrayList<>();
         /** Inizializzazione del gestore nemici */
-        private EnemyManager gestoreNemici;
+        private final EnemyManager gestoreNemici;
         /** 
          * Le immagini dei nemici
          * 
@@ -318,16 +318,15 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             for (Item item : items) {
                 if (item.getRow() == playerRow && item.getCol() == playerCol) {
                     switch (item.getTipo()) {
-                        case 'W': // Oggetto arma
+                        case 'W' -> // Oggetto arma
                             this.weaponDamage += item.getValue(); // Aumenta il danno dell'arma
-                            break;
-                        case 'A': // Oggetto armatura
+                        case 'A' -> // Oggetto armatura
                             this.armor += item.getValue(); // Ignora 4 colpi nemici
-                            break;
-                        case 'H': // Oggetto salute
+                        case 'H' -> {
+                            // Oggetto salute
                             playerHealth += item.getValue(); // Cura il giocatore di 10 danni
                             if (playerHealth > hpMax) playerHealth = hpMax; // La salute non supera hpMax
-                            break;
+                        }
                     }
                     items.remove(item); // Rimuove l'oggetto dalla mappa dopo che è stato raccolto
                     break; // Esci dopo aver raccolto l'oggetto
