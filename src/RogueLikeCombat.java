@@ -17,6 +17,7 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
     private final Enemy enemy;
     private int enemyHealth;
     private int enemyDmg;
+    private int enemyExp;
 
     /** Variabili per il lancio dei dadi */
     private boolean playerRolled = false;
@@ -44,6 +45,7 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
         this.enemy = enemy;
         this.enemyHealth = enemy.getVita();
         this.enemyDmg = enemy.getDanni();
+        this.enemyExp = enemy.getExp();
 
         setPreferredSize(new Dimension(400, 400));
         setBackground(Color.BLACK);
@@ -62,7 +64,7 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
 
     private void resolveCombat() {
         boolean playerWon = enemyHealth <= 0;
-        game.endCombat(playerWon, playerHealth, playerArmor, enemy);
+        game.endCombat(playerWon, playerHealth, playerArmor, enemyExp, enemy);
         SwingUtilities.getWindowAncestor(this).dispose();
     }
 
