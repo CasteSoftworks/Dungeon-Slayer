@@ -580,6 +580,18 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                                 g.drawImage(skeletonImage, col * dim, row * dim, dim, dim, this);
                             } else if (enemy.getTipo() == 'V') {
                                 g.drawImage(vampireImage, col * dim, row * dim, dim, dim, this);
+                            } else if (enemy.getTipo() == 'G') {
+                                g.setColor(Color.GREEN);
+                                g.fillRect(col * dim, row * dim, dim, dim);
+                            }else if (enemy.getTipo() == 'W') {
+                                g.setColor(Color.RED);
+                                g.fillRect(col * dim, row * dim, dim, dim);
+                            }else if (enemy.getTipo() == 'L') {
+                                g.setColor(Color.BLUE);
+                                g.fillRect(col * dim, row * dim, dim, dim);
+                            }else if (enemy.getTipo() == 'D') {
+                                g.setColor(Color.YELLOW);
+                                g.fillRect(col * dim, row * dim, dim, dim);
                             }
                             break;
                         }
