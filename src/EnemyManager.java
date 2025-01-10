@@ -6,6 +6,7 @@ import java.util.Random;
 public class EnemyManager {
     private final List<Enemy> nemici;
     private final Random random = new Random();
+    private final List<Character> tipiNemici = List.of('Z', 'S', 'G', 'W', 'V', 'L', 'D');
 
 
     /**
@@ -78,18 +79,46 @@ public class EnemyManager {
         if (livello <= 5) {
             return 'Z'; // Zombie (100%)
         } else if (livello <= 7) {
-            if (probabilità <= 70) return 'Z'; // Zombie 70%
-            if (probabilità <= 100) return 'S'; // Scheletro 30%
-        } else if (livello <= 10) {
-            if (probabilità <= 50) return 'Z'; // Zombie 50%
-            if (probabilità <= 100) return 'S'; // Scheletro 50%
-        } else if (livello <= 15) {
-            if (probabilità <= 20) return 'Z'; // Zombie 20%
-            if (probabilità <= 95) return 'S'; // Scheletro 75%
-            if (probabilità <= 100) return 'V'; // Vampiro 5%
+            if (probabilità <= 70) return tipiNemici.get(0); // Zombie 70%
+            if (probabilità <= 100) return tipiNemici.get(1); // Scheletro 30%
+        } else if (livello <= 14) {
+            if (probabilità <= 50) return tipiNemici.get(0); // Zombie 50%
+            if (probabilità <= 95) return tipiNemici.get(1); // Scheletro 45%
+            if (probabilità <= 100) return tipiNemici.get(2); // Ghoul 5%
+        } else if (livello <= 21) {
+            if (probabilità <= 20) return tipiNemici.get(0); // Zombie 20%
+            if (probabilità <= 80) return tipiNemici.get(1);  // Scheletro 60%
+            if (probabilità <= 95) return tipiNemici.get(2); // Ghoul 15%
+            if (probabilità <= 100) return tipiNemici.get(3); // Wraith 5%
+        }else if (livello <= 27) {
+            if (probabilità <= 45) return tipiNemici.get(1);  // Scheletro 45%
+            if (probabilità <= 75) return tipiNemici.get(2); // Ghoul 30%
+            if (probabilità <= 99) return tipiNemici.get(3); // Wraith 14%
+            if (probabilità <= 100) return tipiNemici.get(4); // Vampiro 1%
+        } else if(livello <= 35) {
+            if (probabilità <= 20) return tipiNemici.get(1);  // Scheletro 20%
+            if (probabilità <= 70) return tipiNemici.get(2); // Ghoul 50%
+            if (probabilità <= 95) return tipiNemici.get(3); // Wraith 25%
+            if (probabilità <= 100) return tipiNemici.get(4); // Vampiro 5%
+        } else if(livello <= 42) {
+            if (probabilità <= 5) return tipiNemici.get(1);  // Scheletro 5%
+            if (probabilità <= 50) return tipiNemici.get(2); // Ghoul 45%
+            if (probabilità <= 90) return tipiNemici.get(3); // Wraith 40%
+            if (probabilità <= 100) return tipiNemici.get(4); // Vampiro 10%
+        } else if (livello <= 49) {
+            if (probabilità <= 30) return tipiNemici.get(2); // Ghoul 30%
+            if (probabilità <= 80) return tipiNemici.get(3); // Wraith 50%
+            if (probabilità <= 100) return tipiNemici.get(4); // Vampiro 20%
+        } else if (livello <= 56) {
+            if (probabilità <= 15) return tipiNemici.get(2); // Ghoul 15%
+            if (probabilità <= 65) return tipiNemici.get(3); // Wraith 50%
+            if (probabilità <= 99) return tipiNemici.get(4); // Vampiro 34%
+            if (probabilità <= 100) return tipiNemici.get(5); // Lich 1%
         }else{
-            if (probabilità <= 70) return 'S'; // Scheletro 60%
-            if (probabilità <= 100) return 'V'; // Vampiro 30%
+            if (probabilità <= 35) return tipiNemici.get(3); // Wraith 35%
+            if (probabilità <= 70) return tipiNemici.get(4); // Vampiro 35%
+            if (probabilità <= 95) return tipiNemici.get(5); // Lich 25%
+            if (probabilità <= 100) return tipiNemici.get(6); // Drago 5%
         }
         return ' '; // Nessun nemico
     }
