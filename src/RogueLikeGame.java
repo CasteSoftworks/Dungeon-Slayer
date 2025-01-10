@@ -537,11 +537,16 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                     g.fillRect(col * dim, row * dim, dim, dim);
                 } else if (row == playerRow && col == playerCol) {
                     // Disegnare il giocatore
+                    g.setColor(floorColor);
+                    g.fillRect(col * dim, row * dim, dim, dim);
                     g.drawImage(playerImage, col*dim, row*dim,dim,dim, this);
                 } else if (row == portalRow && col == portalCol) {
                     // Disegnare il portale
                     g.drawImage(portalImage, col*dim, row*dim,dim,dim, this);
                 } else {
+                    g.setColor(floorColor);
+                    g.fillRect(col * dim, row * dim, dim, dim);  // Riempie il pavimento con il colore grigio chiaro
+
                     boolean isEnemy = false;
                     for (Enemy enemy : gestoreNemici.getNemici()) {
                         if (enemy.getRow() == row && enemy.getCol() == col) {
