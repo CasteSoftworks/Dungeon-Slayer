@@ -135,24 +135,16 @@ public class EnemyManager {
      * @return la vita
      */
     private int determinaVitaNemico(char tipoNemico, int livello) {
-        switch (tipoNemico) {
-            case 'Z':
-                return 1+(livello/10);
-            case 'S':
-                return 2+(livello/10);
-            case 'G':
-                return 3+(livello/10);
-            case 'W':
-                return 4+(livello/10);
-            case 'V':
-                return 8+(livello/10);
-            case 'L':
-                return 1+(livello/5);
-            case 'D':
-                return 10+(livello/10);
-            default:
-                return 0;
-        }
+        return switch (tipoNemico) {
+            case 'Z' -> 1+(livello/10);
+            case 'S' -> 2+(livello/10);
+            case 'G' -> 3+(livello/10);
+            case 'W' -> 4+(livello/10);
+            case 'V' -> 8+(livello/10);
+            case 'L' -> 1+(livello/5);
+            case 'D' -> 10+(livello/10);
+            default -> 0;
+        };
     }
 
     /**
@@ -167,24 +159,16 @@ public class EnemyManager {
      * @return i danni
      */
     private int determinaDanniNemico(char tipoNemico, int livello) {
-        switch (tipoNemico) {
-            case 'Z':
-                return 1+(livello/10);
-            case 'S':
-                return 2+(livello/10);
-            case 'G':
-                return 2+(livello/10);
-            case 'W':
-                return 3+(livello/10);
-            case 'V':
-                return 4+(livello/10);
-            case 'L':
-                return 2+(livello/5);
-            case 'D':
-                return 5+(livello/10);
-            default:
-                return 0;
-        }
+        return switch (tipoNemico) {
+            case 'Z' -> 1+(livello/10);
+            case 'S' -> 2+(livello/10);
+            case 'G' -> 2+(livello/10);
+            case 'W' -> 3+(livello/10);
+            case 'V' -> 4+(livello/10);
+            case 'L' -> 2+(livello/5);
+            case 'D' -> 5+(livello/10);
+            default -> 0;
+        };
     }
 
     /**
@@ -199,24 +183,16 @@ public class EnemyManager {
      * @return l'esperienza
      */
     private int determinaExpNemico(char tipoNemico, int livello) {
-        switch (tipoNemico) {
-            case 'Z':
-                return 1+(livello/10);
-            case 'S':
-                return 2+(livello/10);
-            case 'G':
-                return 2+(livello/10);
-            case 'W':
-                return 3+(livello/10);
-            case 'V':
-                return 5+(livello/10);
-            case 'L':
-                return 10+(livello/5);
-            case 'D':
-                return 20+(livello/10);
-            default:
-                return 0;
-        }
+        return switch (tipoNemico) {
+            case 'Z' -> 1+(livello/10);
+            case 'S' -> 2+(livello/10);
+            case 'G' -> 2+(livello/10);
+            case 'W' -> 3+(livello/10);
+            case 'V' -> 5+(livello/10);
+            case 'L' -> 10+(livello/5);
+            case 'D' -> 20+(livello/10);
+            default -> 0;
+        };
     }
 
     /**
