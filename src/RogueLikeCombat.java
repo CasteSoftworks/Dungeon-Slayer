@@ -8,7 +8,8 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
     private final RogueLikeGame game;
 
     private int playerHealth;
-    private int playerDmg = 1;
+    private int playerDmg;
+    private int playerArmor;
 
     private final Enemy enemy;
     private int enemyHealth;
@@ -20,9 +21,11 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
     private int enemyRoll = 0;
     private final Random random = new Random();
 
-    public RogueLikeCombat(RogueLikeGame game, int playerHealth, Enemy enemy) {
+    public RogueLikeCombat(RogueLikeGame game, int playerHealth, int playerDmg, int playerArmor, Enemy enemy) {
         this.game = game;
         this.playerHealth = playerHealth;
+        this.playerDmg = playerDmg;
+        this.playerArmor = playerArmor;
         
         this.enemy = enemy;
         this.enemyHealth = enemy.getVita();
@@ -93,7 +96,9 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
                 if (playerRoll > enemyRoll) {
                     enemyHealth-=playerDmg;
                 } else if (enemyRoll > playerRoll) {
-                    playerHealth-=enemyDmg;
+                    if(Math.abs(playerArmor-enemyDmg)>0){
+                        playerHealth-=enemyDmg;
+                    }
                 }
 
                 // Reset rolls for next round
