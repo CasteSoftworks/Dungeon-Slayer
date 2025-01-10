@@ -96,9 +96,10 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
                 if (playerRoll > enemyRoll) {
                     enemyHealth-=playerDmg;
                 } else if (enemyRoll > playerRoll) {
-                    if(playerArmor-enemyDmg<0){
+                    if(enemyRoll-playerRoll>playerArmor){
                         playerHealth-=enemyDmg;
-                    }else{
+                    }else if(enemyRoll-playerRoll==playerArmor){
+                        //playerArmor-=enemyRoll-playerRoll;
                         playerArmor--;
                     }
                 }

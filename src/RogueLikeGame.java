@@ -273,13 +273,13 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             if (item.getRow() == playerRow && item.getCol() == playerCol) {
                 switch (item.getTipo()) {
                     case 'W': // Oggetto arma
-                        this.weaponDamage += 4; // Aumenta il danno dell'arma
+                        this.weaponDamage += item.getValue(); // Aumenta il danno dell'arma
                         break;
                     case 'A': // Oggetto armatura
-                        this.armor += 4; // Ignora 4 colpi nemici
+                        this.armor += item.getValue(); // Ignora 4 colpi nemici
                         break;
                     case 'H': // Oggetto salute
-                        playerHealth += 10; // Cura il giocatore di 10 danni
+                        playerHealth += item.getValue(); // Cura il giocatore di 10 danni
                         if (playerHealth > 100) playerHealth = 100; // La salute non supera 100
                         break;
                 }
