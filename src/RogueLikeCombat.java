@@ -43,7 +43,7 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
 
     private void resolveCombat() {
         boolean playerWon = enemyHealth <= 0;
-        game.endCombat(playerWon, playerHealth, enemy);
+        game.endCombat(playerWon, playerHealth, playerArmor, enemy);
         SwingUtilities.getWindowAncestor(this).dispose();
     }
 
@@ -96,8 +96,10 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
                 if (playerRoll > enemyRoll) {
                     enemyHealth-=playerDmg;
                 } else if (enemyRoll > playerRoll) {
-                    if(Math.abs(playerArmor-enemyDmg)>0){
+                    if(playerArmor-enemyDmg<0){
                         playerHealth-=enemyDmg;
+                    }else{
+                        playerArmor--;
                     }
                 }
 

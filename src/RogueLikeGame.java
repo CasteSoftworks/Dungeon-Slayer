@@ -456,8 +456,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * @param newPlayerHealth la nuova salute del giocatore
      * @param defeatedEnemy il nemico sconfitto
      */
-    void endCombat(boolean playerWon, int newPlayerHealth, Enemy defeatedEnemy) {
+    void endCombat(boolean playerWon, int newPlayerHealth, int playerArmor, Enemy defeatedEnemy) {
         playerHealth = newPlayerHealth;
+        armor = playerArmor;
         inCombat = false;
 
         if (playerWon) {
