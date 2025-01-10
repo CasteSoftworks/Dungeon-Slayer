@@ -32,25 +32,55 @@ public class RogueLikeGame extends JPanel implements KeyListener {
 
     /** La posizione del giocatore */
     private int playerRow, playerCol;
+    /** La salute massima del giocatore */
+    private final int hpMax = 100;
+    /** La salute del giocatore */
+    private int playerHealth = hpMax;
+    /** L'armatura del giocatore */
+    private int armor = 0;
+    /** Il danno inflitto dall'arma */
+    private int weaponDamage;
+    /** L'immagine del giocatore */
     private BufferedImage playerImage;
-    private int armor = 0;  // Numero di colpi che il giocatore può ignorare
-    private int weaponDamage;  // Danno inflitto dall'arma
+    /** La quantità di punti vita curabili */
     @SuppressWarnings("unused")
-    private int healAmount = 0;  // Salute da curare
+    private int healAmount = 0;
 
     /** La posizione del portale */
     private int portalRow, portalCol;
+    /** L'immagine del portale */
     private BufferedImage portalImage;
 
+    /** La lista degli oggetti */
     private List<Item> items = new ArrayList<>();
+    /** Inizializzazione del gestore oggetti */
     private ItemManager gestoreOggetti;
+    /** 
+     * Le immagini degli oggetti
+     * 
+     * <ul>
+     * <li>healthImage: l'immagine dell'oggetto salute</li>
+     * <li>armorImage: l'immagine dell'oggetto armatura</li>
+     * <li>weaponImage: l'immagine dell'oggetto arma</li>
+     * </ul>
+     */
     private BufferedImage armorImage;
     private BufferedImage weaponImage;
     private BufferedImage healthImage;
 
     /** La lista degli nemici */
     private List<Enemy> enemies = new ArrayList<>();
+    /** Inizializzazione del gestore nemici */
     private EnemyManager gestoreNemici;
+    /** 
+     * Le immagini dei nemici
+     * 
+     * <ul>
+     * <li>zombieImage: l'immagine del nemico zombie</li>
+     * <li>skeletonImage: l'immagine del nemico scheletro</li>
+     * <li>vampireImage: l'immagine del nemico vampiro</li>
+     * </ul>
+     */
     private BufferedImage zombieImage;
     private BufferedImage skeletonImage;
     private BufferedImage vampireImage;
@@ -62,8 +92,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     /** Il livello del gioco */
     private int level = 1;
 
-    /** La salute del giocatore */
-    private int playerHealth = 100;
+    
 
     /** Inizializzazione di Combat */
     private RogueLikeCombat combat;
@@ -105,6 +134,11 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         placeEnemies();
     }
 
+    /**
+     * Il metodo per caricare le immagini
+     * 
+     * @throws IOException se si verifica un errore durante il caricamento delle immagini
+     */
     private void loadImages() {
         try {
             zombieImage = ImageIO.read(new File("src/icone/zombie.png"));
@@ -131,7 +165,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         placePortal();
         gestoreNemici.generaNemici(map, level);
         placeEnemies();
-        playerHealth = 100; // Ripristina la salute del giocatore
+        if(playerHealth<hpMax){
+            playerHealth +=1;
+        }
         gameOver = false; // Ripristina lo stato di fine partita
         gameWin = false;  // Ripristina lo stato di vittoria
         level++; // Incrementa il livello
@@ -264,10 +300,16 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * Il metodo per posizionare gli oggetti
+     */
     private void placeItems() {
         items = gestoreOggetti.generaOggetti(map, level);
     }
 
+    /**
+     * Il metodo per gestire il ritiro degli oggetti
+     */
     private void handleItemPickup() {
         for (Item item : items) {
             if (item.getRow() == playerRow && item.getCol() == playerCol) {
