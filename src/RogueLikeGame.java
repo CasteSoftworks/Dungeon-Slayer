@@ -87,7 +87,11 @@ public class RogueLikeGame extends JPanel implements KeyListener {
          */
         private BufferedImage zombieImage;
         private BufferedImage skeletonImage;
+        private BufferedImage ghoulImage;
+        private BufferedImage wraithImage;
         private BufferedImage vampireImage;
+        private BufferedImage lichImage;
+        private BufferedImage dragonImage;
     
         /** La booleana che indica se il gioco è finito */
         private boolean gameOver = false;
@@ -147,7 +151,12 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             try {
                 zombieImage = ImageIO.read(new File("src/icone/zombie.png"));
                 skeletonImage = ImageIO.read(new File("src/icone/scheletro.png"));
+                ghoulImage = ImageIO.read(new File("src/icone/ghoul.png"));
+                wraithImage = ImageIO.read(new File("src/icone/wraith.png"));
                 vampireImage = ImageIO.read(new File("src/icone/vampiro.png"));
+                lichImage = ImageIO.read(new File("src/icone/lich.png"));
+                dragonImage = ImageIO.read(new File("src/icone/drago.png"));
+
                 playerImage = ImageIO.read(new File("src/icone/eroe.png"));
                 portalImage = ImageIO.read(new File("src/icone/scale.png"));
                 healthImage = ImageIO.read(new File("src/icone/cura.png"));
@@ -575,23 +584,11 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                             switch (enemy.getTipo()) {
                                 case 'Z' -> g.drawImage(zombieImage, col * dim, row * dim, dim, dim, this);
                                 case 'S' -> g.drawImage(skeletonImage, col * dim, row * dim, dim, dim, this);
+                                case 'G' -> g.drawImage(ghoulImage, col*dim, row*dim, dim, dim, this);
+                                case 'W' -> g.drawImage(wraithImage, col*dim, row*dim, dim, dim, this);
                                 case 'V' -> g.drawImage(vampireImage, col * dim, row * dim, dim, dim, this);
-                                case 'G' -> {
-                                    g.setColor(Color.GREEN);
-                                    g.fillRect(col * dim, row * dim, dim, dim);
-                                }
-                                case 'W' -> {
-                                    g.setColor(Color.RED);
-                                    g.fillRect(col * dim, row * dim, dim, dim);
-                                }
-                                case 'L' -> {
-                                    g.setColor(Color.BLUE);
-                                    g.fillRect(col * dim, row * dim, dim, dim);
-                                }
-                                case 'D' -> {
-                                    g.setColor(Color.YELLOW);
-                                    g.fillRect(col * dim, row * dim, dim, dim);
-                                }
+                                case 'L' -> g.drawImage(lichImage, col*dim, row*dim, dim, dim, this);
+                                case 'D' -> g.drawImage(dragonImage, col*dim, row*dim, dim, dim, this);
                                 default -> {
                                 }
                             }
