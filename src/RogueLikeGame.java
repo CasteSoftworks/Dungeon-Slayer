@@ -34,7 +34,8 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     private int playerRow, playerCol;
     private BufferedImage playerImage;
     private int armor = 0;  // Numero di colpi che il giocatore può ignorare
-    private int weaponDamage = 0;  // Danno inflitto dall'arma
+    private int weaponDamage;  // Danno inflitto dall'arma
+    @SuppressWarnings("unused")
     private int healAmount = 0;  // Salute da curare
 
     /** La posizione del portale */
@@ -43,9 +44,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
 
     private List<Item> items = new ArrayList<>();
     private ItemManager gestoreOggetti;
-    /*private BufferedImage armorImage;
+    private BufferedImage armorImage;
     private BufferedImage weaponImage;
-    private BufferedImage healthImage;*/
+    private BufferedImage healthImage;
 
     /** La lista degli nemici */
     private List<Enemy> enemies = new ArrayList<>();
@@ -88,6 +89,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
 
         this.gestoreOggetti = new ItemManager();
 
+        this.armor=0;
+        this.weaponDamage=1;
+
         setPreferredSize(new Dimension(cols * dim, rows * dim));
         setBackground(Color.BLACK);
         setFocusable(true);
@@ -108,6 +112,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             vampireImage = ImageIO.read(new File("src/icone/vampiro.png"));
             playerImage = ImageIO.read(new File("src/icone/eroe.png"));
             portalImage = ImageIO.read(new File("src/icone/scale.png"));
+            healthImage = ImageIO.read(new File("src/icone/cura.png"));
+            armorImage = ImageIO.read(new File("src/icone/scudo.png"));
+            weaponImage = ImageIO.read(new File("src/icone/arma.png"));
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Errore nel caricamento delle immagini!");
@@ -128,6 +135,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         gameOver = false; // Ripristina lo stato di fine partita
         gameWin = false;  // Ripristina lo stato di vittoria
         level++; // Incrementa il livello
+        placeItems();
         repaint();
     }
 
@@ -265,10 +273,10 @@ public class RogueLikeGame extends JPanel implements KeyListener {
             if (item.getRow() == playerRow && item.getCol() == playerCol) {
                 switch (item.getTipo()) {
                     case 'W': // Oggetto arma
-                        weaponDamage += 4; // Aumenta il danno dell'arma
+                        this.weaponDamage += 4; // Aumenta il danno dell'arma
                         break;
                     case 'A': // Oggetto armatura
-                        armor += 4; // Ignora 4 colpi nemici
+                        this.armor += 4; // Ignora 4 colpi nemici
                         break;
                     case 'H': // Oggetto salute
                         playerHealth += 10; // Cura il giocatore di 10 danni
@@ -431,7 +439,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
      * @param enemy il nemico con cui combattere
      */
     private void startCombat(Enemy enemy) {
-        combat = new RogueLikeCombat(this, playerHealth, enemy);
+        combat = new RogueLikeCombat(this, playerHealth, weaponDamage, armor, enemy);
         inCombat = true;
         JFrame combatFrame = new JFrame("Combat");
         combatFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -510,14 +518,12 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                         if (item.getRow() == row && item.getCol() == col) {
                             isItem = true;
                             if (item.getTipo() == 'H') {
-                                g.setColor(Color.RED); // Oggetto salute
-                                g.fillRect(col * dim, row * dim, dim, dim);
+                                g.drawImage(healthImage, col*dim, row*dim, dim, dim, this);
                             } else if (item.getTipo() == 'A') {
-                                g.setColor(Color.BLUE); // Oggetto armatura
-                                g.fillRect(col * dim, row * dim, dim, dim);
+                                g.drawImage(armorImage, col*dim, row*dim, dim, dim, this);
+                            
                             } else if (item.getTipo() == 'W') {
-                                g.setColor(Color.YELLOW); // Oggetto arma
-                                g.fillRect(col * dim, row * dim, dim, dim);
+                                g.drawImage(weaponImage, col*dim, row*dim, dim, dim, this);
                             }
                         }
                     }
