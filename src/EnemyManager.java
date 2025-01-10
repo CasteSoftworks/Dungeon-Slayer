@@ -8,15 +8,30 @@ public class EnemyManager {
     private final Random random = new Random();
 
 
-
+    /**
+     * Costruttore della classe EnemyManager
+     */
     public EnemyManager() {
         this.nemici = new ArrayList<>();
     }
 
+    /**
+     * Restituisce la lista dei nemici
+     * 
+     * @return la lista dei nemici
+     */
     public List<Enemy> getNemici() {
         return nemici;
     }
 
+    /**
+     * Genera i nemici sulla mappa
+     * 
+     * @param mappa la mappa
+     * @param livello il livello del gioco
+     * 
+     * @return la lista dei nemici
+     */
     public List<Enemy> generaNemici(char[][] mappa, int livello) {
         nemici.clear();
         int maxNemici = random.nextInt(4) + 2; // Da 2 a 5 nemici
@@ -27,12 +42,12 @@ public class EnemyManager {
 
                 if (mappa[row][col] == '.') {
                     char tipoNemico = determinaTipoNemico(livello);
-                    int vitanemico = determinaVitaNemico(tipoNemico);
-                    int danniNemico = determinaDanniNemico(tipoNemico);
+                    int vitanemico = determinaVitaNemico(tipoNemico, livello);
+                    int danniNemico = determinaDanniNemico(tipoNemico, livello);
+                    int expNemico = determinaExpNemico(tipoNemico, livello);
 
                     if (tipoNemico != ' ') {
-                        
-                        nemici.add(new Enemy(row, col, tipoNemico, vitanemico, danniNemico));
+                        nemici.add(new Enemy(row, col, tipoNemico, vitanemico, danniNemico, expNemico));
                         break;
                     }
                 }
@@ -42,6 +57,21 @@ public class EnemyManager {
         return new ArrayList<>(nemici);
     }
 
+    /**
+     * Determina il tipo di nemico in base al livello
+     * 
+     * <p>
+     * I nemici sono divisi in:
+     * <ul>
+     * <li>Z: Zombie</li>
+     * <li>S: Scheletro</li>
+     * <li>V: Vampiro</li>
+     * </ul>
+     * 
+     * @param livello il livello del gioco
+     * 
+     * @return il tipo di nemico
+     */
     private char determinaTipoNemico(int livello) {
         int probabilità = random.nextInt(100) + 1;
 
@@ -64,64 +94,83 @@ public class EnemyManager {
         return ' '; // Nessun nemico
     }
 
-    private int determinaVitaNemico(char tipoNemico) {
+    /**
+     * Determina la vita del nemico in base al tipo e al livello
+     * 
+     * <p>
+     * La vita aumenta di 1 ogni 10 livelli
+     * 
+     * @param tipoNemico il tipo di nemico
+     * @param livello il livello del gioco
+     * 
+     * @return la vita
+     */
+    private int determinaVitaNemico(char tipoNemico, int livello) {
         switch (tipoNemico) {
             case 'Z':
-                return 1;
+                return 1+(livello/10);
             case 'S':
-                return 2;
+                return 2+(livello/10);
             case 'V':
-                return 8;
+                return 8+(livello/10);
             default:
                 return 0;
         }
     }
 
-    private int determinaDanniNemico(char tipoNemico) {
+    /**
+     * Determina i danni che il nemico infliggerà al giocatore in base al tipo e al livello
+     * 
+     * <p>
+     * I danni aumentano di 1 ogni 10 livelli
+     * 
+     * @param tipoNemico il tipo di nemico
+     * @param livello il livello del gioco
+     * 
+     * @return i danni
+     */
+    private int determinaDanniNemico(char tipoNemico, int livello) {
         switch (tipoNemico) {
             case 'Z':
-                return 1;
+                return 1+(livello/10);
             case 'S':
-                return 1;
+                return 2+(livello/10);
             case 'V':
-                return 3;
+                return 3+(livello/10);
             default:
                 return 0;
         }
     }
 
-    public void muoviNemici(char[][] mappa, int playerRow, int playerCol) {
-        for (Enemy nemico : nemici) {
-            int[] nuovaPosizione = calcolaNuovoMovimento(nemico, mappa, playerRow, playerCol);
-            nemico.setRow(nuovaPosizione[0]);
-            nemico.setCol(nuovaPosizione[1]);
+    /**
+     * Determina l'esperienza che il nemico darà al giocatore in base al tipo e al livello
+     * 
+     *  <p>
+     * L'esperienza aumenta di 1 ogni 10 livelli
+     * 
+     * @param tipoNemico il tipo di nemico
+     * @param livello il livello del giocatore
+     * 
+     * @return l'esperienza
+     */
+    private int determinaExpNemico(char tipoNemico, int livello) {
+        switch (tipoNemico) {
+            case 'Z':
+                return 1+(livello/10);
+            case 'S':
+                return 2+(livello/10);
+            case 'V':
+                return 5+(livello/10);
+            default:
+                return 0;
         }
     }
 
-    private int[] calcolaNuovoMovimento(Enemy nemico, char[][] mappa, int playerRow, int playerCol) {
-        // Movimento semplice verso il giocatore o casuale
-        int dx = playerCol - nemico.getCol();
-        int dy = playerRow - nemico.getRow();
-        int nuovaRiga = nemico.getRow();
-        int nuovaColonna = nemico.getCol();
-
-        if (Math.abs(dx) > Math.abs(dy)) {
-            if (dx > 0 && mappa[nuovaRiga][nuovaColonna + 1] == '.') {
-                nuovaColonna++;
-            } else if (dx < 0 && mappa[nuovaRiga][nuovaColonna - 1] == '.') {
-                nuovaColonna--;
-            }
-        } else {
-            if (dy > 0 && mappa[nuovaRiga + 1][nuovaColonna] == '.') {
-                nuovaRiga++;
-            } else if (dy < 0 && mappa[nuovaRiga - 1][nuovaColonna] == '.') {
-                nuovaRiga--;
-            }
-        }
-
-        return new int[]{nuovaRiga, nuovaColonna};
-    }
-
+    /**
+     * Rimuove un nemico dalla lista
+     * 
+     * @param nemico il nemico da rimuovere
+     */
     public void rimuoviNemico(Enemy nemico) {
         nemici.remove(nemico);
     }
