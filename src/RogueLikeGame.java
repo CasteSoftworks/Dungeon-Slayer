@@ -586,7 +586,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         // Disegno della barra delle informazioni in alto
         g.setColor(Color.BLACK);
         g.setFont(new Font("Monospaced", Font.BOLD, dim));
-        g.drawString("Vita: " + playerHealth, 10, 20); // Mostra la vita in alto a sinistra
+        g.drawString("Vita: " + playerHealth+" Armatura: "+armor+" Danni: "+weaponDamage, 10, 20); // Mostra la vita in alto a sinistra
         String levelText = "Livello: " + level;
         int levelTextWidth = metrics.stringWidth(levelText);
         g.drawString(levelText, width - levelTextWidth - 10, 20); // Mostra il livello in alto a destra considerando la dimensione del testo
