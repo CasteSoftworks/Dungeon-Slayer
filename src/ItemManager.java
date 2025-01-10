@@ -66,9 +66,9 @@ public class ItemManager {
             case 'H':
                 return random.nextInt(10) + 1; // Da 1 a 10 punti vita
             case 'A':
-                return random.nextInt(5) + 1; // Da 1 a 5 punti armatura
+                return 1; // 1 punto armatura
             case 'W':
-                return random.nextInt(5) + 1; // Da 1 a 5 punti danno
+                return 1; // 1 punto danno
             default:
                 return 0;
         }
