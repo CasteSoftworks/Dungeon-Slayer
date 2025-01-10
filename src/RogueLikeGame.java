@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -22,6 +21,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     /** Il numero di colonne della mappa */
     private final int cols;
 
+    /** La dimensione di ogni oggetto */
     private final int dim=24;
 
     /** La mappa del gioco */
@@ -194,12 +194,12 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     
             // Genera stanze casuali
             for (int i = 0; i < roomCount; i++) {
-                int width = random.nextInt(10 - 5 + 1) + 5;
-                int height = random.nextInt(10 - 5 + 1) + 5;
-                int x = random.nextInt(cols - width - 1) + 1;
-                int y = random.nextInt(rows - height - 1) + 1;
+                int w = random.nextInt(10 - 5 + 1) + 5;
+                int h = random.nextInt(10 - 5 + 1) + 5;
+                int x = random.nextInt(cols - w - 1) + 1;
+                int y = random.nextInt(rows - h - 1) + 1;
     
-                Rectangle newRoom = new Rectangle(x, y, width, height);
+                Rectangle newRoom = new Rectangle(x, y, w, h);
                 boolean overlaps = false;
     
                 for (Rectangle room : rooms) {
@@ -326,7 +326,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                             break;
                         case 'H': // Oggetto salute
                             playerHealth += item.getValue(); // Cura il giocatore di 10 danni
-                            if (playerHealth > 100) playerHealth = 100; // La salute non supera 100
+                            if (playerHealth > hpMax) playerHealth = hpMax; // La salute non supera hpMax
                             break;
                     }
                     items.remove(item); // Rimuove l'oggetto dalla mappa dopo che è stato raccolto
@@ -511,7 +511,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                 enemies.remove(defeatedEnemy);
                 gestoreNemici.rimuoviNemico(defeatedEnemy);
                 playerExp += newExp;
-                if(playerExp>=playerLevel*10){
+                if(playerExp>=(2*playerLevel*10)){
                     playerLevel++;
                     hpMax+=10;
                     showLevelUp();
@@ -574,24 +574,28 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                     for (Enemy enemy : gestoreNemici.getNemici()) {
                         if (enemy.getRow() == row && enemy.getCol() == col) {
                             isEnemy = true;
-                            if (enemy.getTipo() == 'Z') {
-                                g.drawImage(zombieImage, col * dim, row * dim, dim, dim, this);
-                            } else if (enemy.getTipo() == 'S') {
-                                g.drawImage(skeletonImage, col * dim, row * dim, dim, dim, this);
-                            } else if (enemy.getTipo() == 'V') {
-                                g.drawImage(vampireImage, col * dim, row * dim, dim, dim, this);
-                            } else if (enemy.getTipo() == 'G') {
-                                g.setColor(Color.GREEN);
-                                g.fillRect(col * dim, row * dim, dim, dim);
-                            }else if (enemy.getTipo() == 'W') {
-                                g.setColor(Color.RED);
-                                g.fillRect(col * dim, row * dim, dim, dim);
-                            }else if (enemy.getTipo() == 'L') {
-                                g.setColor(Color.BLUE);
-                                g.fillRect(col * dim, row * dim, dim, dim);
-                            }else if (enemy.getTipo() == 'D') {
-                                g.setColor(Color.YELLOW);
-                                g.fillRect(col * dim, row * dim, dim, dim);
+                            switch (enemy.getTipo()) {
+                                case 'Z' -> g.drawImage(zombieImage, col * dim, row * dim, dim, dim, this);
+                                case 'S' -> g.drawImage(skeletonImage, col * dim, row * dim, dim, dim, this);
+                                case 'V' -> g.drawImage(vampireImage, col * dim, row * dim, dim, dim, this);
+                                case 'G' -> {
+                                    g.setColor(Color.GREEN);
+                                    g.fillRect(col * dim, row * dim, dim, dim);
+                                }
+                                case 'W' -> {
+                                    g.setColor(Color.RED);
+                                    g.fillRect(col * dim, row * dim, dim, dim);
+                                }
+                                case 'L' -> {
+                                    g.setColor(Color.BLUE);
+                                    g.fillRect(col * dim, row * dim, dim, dim);
+                                }
+                                case 'D' -> {
+                                    g.setColor(Color.YELLOW);
+                                    g.fillRect(col * dim, row * dim, dim, dim);
+                                }
+                                default -> {
+                                }
                             }
                             break;
                         }
@@ -600,13 +604,12 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                     for (Item item : items) {
                         if (item.getRow() == row && item.getCol() == col) {
                             isItem = true;
-                            if (item.getTipo() == 'H') {
-                                g.drawImage(healthImage, col*dim, row*dim, dim, dim, this);
-                            } else if (item.getTipo() == 'A') {
-                                g.drawImage(armorImage, col*dim, row*dim, dim, dim, this);
-                            
-                            } else if (item.getTipo() == 'W') {
-                                g.drawImage(weaponImage, col*dim, row*dim, dim, dim, this);
+                            switch (item.getTipo()) {
+                                case 'H' -> g.drawImage(healthImage, col*dim, row*dim, dim, dim, this);
+                                case 'A' -> g.drawImage(armorImage, col*dim, row*dim, dim, dim, this);
+                                case 'W' -> g.drawImage(weaponImage, col*dim, row*dim, dim, dim, this);
+                                default -> {
+                                }
                             }
                         }
                     }
