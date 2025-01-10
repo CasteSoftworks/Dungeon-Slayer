@@ -5,22 +5,36 @@ import java.util.Random;
 import javax.swing.*;
 
 public class RogueLikeCombat extends JPanel implements KeyListener {
+    /** Il costrutto gioco */
     private final RogueLikeGame game;
 
+    /** Vita, danni e armatura del giocatore */
     private int playerHealth;
     private int playerDmg;
     private int playerArmor;
 
+    /** Nemico con vita e danni del nemico */
     private final Enemy enemy;
     private int enemyHealth;
     private int enemyDmg;
 
+    /** Variabili per il lancio dei dadi */
     private boolean playerRolled = false;
     private boolean enemyRolled = false;
     private int playerRoll = 0;
     private int enemyRoll = 0;
+    /** Generatore di numeri casuali */
     private final Random random = new Random();
 
+    /**
+     * Costruttore di RogueLikeCombat
+     * 
+     * @param game costrutto gioco
+     * @param playerHealth vita del giocatore
+     * @param playerDmg danni del giocatore
+     * @param playerArmor armatura del giocatore
+     * @param enemy nemico
+     */
     public RogueLikeCombat(RogueLikeGame game, int playerHealth, int playerDmg, int playerArmor, Enemy enemy) {
         this.game = game;
         this.playerHealth = playerHealth;
@@ -37,8 +51,13 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
         addKeyListener(this);
     }
 
+    /**
+     * Lancia un dado a 6 facce
+     * 
+     * @return risultato del lancio
+     */
     private int rollDice() {
-        return random.nextInt(6) + 1;
+        return random.ints(1, 1, 7).findFirst().getAsInt();
     }
 
     private void resolveCombat() {
