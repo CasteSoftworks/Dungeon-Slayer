@@ -154,7 +154,6 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                 armorImage = ImageIO.read(new File("src/icone/scudo.png"));
                 weaponImage = ImageIO.read(new File("src/icone/arma.png"));
             } catch (IOException e) {
-                e.printStackTrace();
                 System.out.println("Errore nel caricamento delle immagini!");
             }
         }
