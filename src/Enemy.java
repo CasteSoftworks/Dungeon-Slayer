@@ -14,6 +14,7 @@ public class Enemy {
     /** Vita e danni del nemico */
     private int vita;
     private int danni;
+    private int exp;
 
     /**
      * Costruttore di Enemy
@@ -24,12 +25,13 @@ public class Enemy {
      * @param vita vita del nemico
      * @param danni danni del nemico
      */
-    public Enemy(int row, int col, char tipo, int vita, int danni) {
+    public Enemy(int row, int col, char tipo, int vita, int danni, int exp) {
         this.row = row;
         this.col = col;
         this.tipo = tipo;
         this.vita = vita;
         this.danni = danni;
+        this.exp = exp;
     }
 
     /**
@@ -93,6 +95,15 @@ public class Enemy {
      */
     public int getDanni() {
         return danni;
+    }
+
+    /**
+     * Recupera l'esperienza del nemico
+     * 
+     * @return
+     */
+    public int getExp() {
+        return exp;
     }
 
     /**
