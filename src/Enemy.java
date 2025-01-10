@@ -10,10 +10,14 @@ public class Enemy {
      * <li>'V' per Vampiro</li>
      * </ul>
      */
+    @SuppressWarnings("FieldMayBeFinal")
     private char tipo;
     /** Vita e danni del nemico */
+    @SuppressWarnings("FieldMayBeFinal")
     private int vita;
+    @SuppressWarnings("FieldMayBeFinal")
     private int danni;
+    @SuppressWarnings("FieldMayBeFinal")
     private int exp;
 
     /**
