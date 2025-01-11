@@ -97,5 +97,4 @@ public class ItemManager {
             default -> 0;
         };
     }
-    
 }
