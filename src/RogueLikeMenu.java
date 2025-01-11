@@ -4,13 +4,23 @@ import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 public class RogueLikeMenu extends JPanel {
+    /** Il frame del menù */
     @SuppressWarnings("FieldMayBeFinal")
     private JFrame frame;
+    /** La larghezza del menù */
     @SuppressWarnings("FieldMayBeFinal")
     private int width;
+    /** La altezza del menù */
     @SuppressWarnings("FieldMayBeFinal")
     private int height;
 
+    /**
+     * Costruttore del menù del gioco
+     * 
+     * @param frame il frame del menù
+     * @param width la larghezza del menù
+     * @param height l'altezza del menù
+     */
     public RogueLikeMenu(JFrame frame, int width, int height) {
         this.frame = frame;
         this.width = width;
@@ -31,6 +41,9 @@ public class RogueLikeMenu extends JPanel {
         });
     }
 
+    /**
+     * Avvia il gioco rimuovendo il menù e aggiungendo il pannello del gioco alla finestra
+     */
     private void startGame() {
         frame.getContentPane().removeAll(); // Rimuove il menù
         RogueLikeGame gamePanel = new RogueLikeGame(width, height); // Pannello del gioco

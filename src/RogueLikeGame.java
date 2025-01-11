@@ -141,6 +141,7 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
         placePortal();
         placeItems();
         placeEnemies();
+        
         loadImages();
         
         audioPlayer = new AudioPlayer();
@@ -151,10 +152,8 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
     
     /**
      * Il metodo per caricare le immagini
-     * 
-     * @throws IOException se si verifica un errore durante il caricamento delle immagini
      */
-    private void loadImages() {
+    private void loadImages(){
         try {
             zombieImage = ImageIO.read(new File("src/icone/zombie.png"));
             skeletonImage = ImageIO.read(new File("src/icone/scheletro.png"));
@@ -398,6 +397,7 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
      * @param y1 coordinata y del punto 1
      * @param x2 coordinata x del punto 2
      * @param y2 coordinata y del punto 2
+     * 
      * @return true se c'è una linea di vista, false altrimenti
      */
     private boolean hasLineOfSight(int x1, int y1, int x2, int y2) {
@@ -514,7 +514,7 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
      * @param newPlayerHealth la nuova salute del giocatore
      * @param defeatedEnemy il nemico sconfitto
      */
-    void endCombat(boolean playerWon, int newPlayerHealth, int playerArmor, int newExp, Enemy defeatedEnemy) {
+    public void endCombat(boolean playerWon, int newPlayerHealth, int playerArmor, int newExp, Enemy defeatedEnemy) {
         
         armor = playerArmor;
         inCombat = false;
@@ -536,6 +536,9 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
     repaint();
     }
 
+    /**
+     * Il metodo per mostrare il livello raggiunto
+     */
     private void showLevelUp() {
         JFrame levelUpFrame = new JFrame("Level Up");
         levelUpFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

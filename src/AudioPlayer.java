@@ -10,7 +10,7 @@ public class AudioPlayer {
      *
      * @param filePath il percorso del file audio
      */
-    public void load(String filePath) {
+    public void load(String filePath){
         try {
             File audioFile = new File(filePath);
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(audioFile);

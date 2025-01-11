@@ -4,8 +4,24 @@ import java.util.List;
 import java.util.Random;
 
 public class EnemyManager {
+    /** Lista dei nemici */
     private final List<Enemy> nemici;
+    /** Generatore di numeri casuali */
     private final Random random = new Random();
+    /** 
+     * Lista dei tipi di nemici
+     * 
+     * <ul>
+     * <li>Z: Zombie</li>
+     * <li>S: Scheletro</li>
+     * <li>G: Ghoul</li>
+     * <li>W: Wraith</li>
+     * <li>V: Vampiro</li>
+     * <li>L: Lich</li>
+     * <li>D: Drago</li>
+     * </ul> 
+     * 
+     */
     private final List<Character> tipiNemici = List.of('Z', 'S', 'G', 'W', 'V', 'L', 'D');
 
 
@@ -67,6 +83,10 @@ public class EnemyManager {
      * <li>Z: Zombie</li>
      * <li>S: Scheletro</li>
      * <li>V: Vampiro</li>
+     * <li>G: Ghoul</li>
+     * <li>W: Wraith</li>
+     * <li>L: Lich</li>
+     * <li>D: Drago</li>
      * </ul>
      * 
      * @param livello il livello del gioco

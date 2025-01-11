@@ -1,6 +1,9 @@
 import javax.swing.JFrame;
 
 public class GameLauncher {
+    /**
+     * Metodo per avviare il gioco
+     */
     public void launch() {
         int width = 800;  // Larghezza della finestra
         int height = 600; // Altezza della finestra

@@ -4,15 +4,7 @@ import java.io.Serializable;
 public class Enemy implements Serializable{
     /** Le coordinate del nemico */
     private int row, col;
-    /** 
-     * Il tipo di nemico
-     * 
-     * <ul>
-     * <li>'Z' per Zombie</li>
-     * <li>'S' per Scheletro</li>
-     * <li>'V' per Vampiro</li>
-     * </ul>
-     */
+    /** Il tipo di nemico */
     @SuppressWarnings("FieldMayBeFinal")
     private char tipo;
     /** Vita e danni del nemico */
