@@ -753,15 +753,8 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
      * @param gamePanel il pannello del gioco
      */
     public void start(RogueLikeGame gamePanel) {
-        JFrame frame = new JFrame("RogueLike Game - Giocatore e Nemici");
-
-        playerName=askPlayerName();
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(gamePanel);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        playerName = askPlayerName();
+        gamePanel.requestFocusInWindow(); // Ensure the game panel has focus for key events
     }
     /**
      * Il metodo per chiedere il nome del giocatore
