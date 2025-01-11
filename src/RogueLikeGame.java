@@ -1,9 +1,12 @@
 import java.awt.*;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +14,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public final class RogueLikeGame extends JPanel implements KeyListener {
+    public static String playerName = null;
     /** La larghezza del frame */
     private final int width;
     /** La altezza del frame */
@@ -548,6 +552,21 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
         levelUpFrame.pack();
         levelUpFrame.setLocationRelativeTo(null);
         levelUpFrame.setVisible(true);
+        }
+
+    private void saveInfo() {
+        try (FileOutputStream fos = new FileOutputStream("lead.bin", true);
+            ObjectOutputStream oos = new ObjectOutputStream(fos) {
+            @Override
+            protected void writeStreamHeader() throws IOException {
+                reset();
+            }
+            }) {
+            String saveData = playerName + ", of level " + playerLevel + ", reached the " + level + "th level of the dungeon\n";
+            oos.write(saveData.getBytes());
+        } catch (IOException ex) {
+            System.out.println("Error saving game data: " + ex.getMessage());
+        }
     }
 
     /**
@@ -649,6 +668,37 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
             int x = (getWidth() - fm.stringWidth(message)) / 2;
             int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
             g.drawString(message, x, y);
+
+            if (gameOver) {
+
+                saveInfo();
+
+                g.setFont(new Font("Monospaced", Font.BOLD, 24));
+                fm = g.getFontMetrics();
+                String restartMessage = "Premi R per ricominciare o ESC per uscire";
+                int restartX = (getWidth() - fm.stringWidth(restartMessage)) / 2;
+                int restartY = y + fm.getHeight() + 20; // Ensure no overlap by adding extra space
+                g.drawString(restartMessage, restartX, restartY);
+
+                addKeyListener(new KeyAdapter() {
+                    @Override
+                    public void keyPressed(KeyEvent e) {
+                        if (e.getKeyCode() == KeyEvent.VK_R) {
+                            level = 0;
+                            gameOver = false;
+                            gameWin = false;
+                            playerHealth = hpMax;
+                            playerExp = 0;
+                            playerLevel = 1;
+                            armor = 0;
+                            weaponDamage = 1;
+                            nextLevel();
+                        } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                            System.exit(0);
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -705,10 +755,18 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
     public void start(RogueLikeGame gamePanel) {
         JFrame frame = new JFrame("RogueLike Game - Giocatore e Nemici");
 
+        playerName=askPlayerName();
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(gamePanel);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+    /**
+     * Il metodo per chiedere il nome del giocatore
+     */
+    private String askPlayerName() {
+        return JOptionPane.showInputDialog(this, "Inserisci il tuo nome:", "Nome Giocatore", JOptionPane.PLAIN_MESSAGE);
     }
 }
