@@ -4,8 +4,11 @@ import java.io.*;
 import javax.swing.*;
 
 public class LeaderBoard extends JPanel {
+    @SuppressWarnings("FieldMayBeFinal")
     private JFrame frame;
+    @SuppressWarnings("unused")
     private int width;
+    @SuppressWarnings("unused")
     private int height;
 
     public LeaderBoard(JFrame frame, int width, int height) {
@@ -55,7 +58,7 @@ public class LeaderBoard extends JPanel {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Errore nella lettura del file: " + filePath);
         }
         return data.toString();
     }

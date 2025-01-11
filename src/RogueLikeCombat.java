@@ -10,13 +10,16 @@ public class RogueLikeCombat extends JPanel implements KeyListener {
 
     /** Vita, danni e armatura del giocatore */
     private int playerHealth;
+    @SuppressWarnings("FieldMayBeFinal")
     private int playerDmg;
     private int playerArmor;
 
     /** Nemico con vita e danni del nemico */
     private final Enemy enemy;
     private int enemyHealth;
+    @SuppressWarnings("FieldMayBeFinal")
     private int enemyDmg;
+    @SuppressWarnings("FieldMayBeFinal")
     private int enemyExp;
 
     /** Variabili per il lancio dei dadi */
