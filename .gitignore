@@ -1,3 +1,4 @@
 /bin
-lead.bin
-MANIFEST.MF
+*.bin
+*.MF
+*.jar
