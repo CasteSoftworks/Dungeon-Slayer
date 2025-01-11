@@ -1,17 +1,17 @@
-## RougeLikeGame
-Benvenuti nel progetto **RougeLikeGame**!
+## DungeonSlayer
+Benvenuti nel progetto **DungeonSlayer**!
 
 ### Descrizione
-RougeLikeGame è un gioco di avventura roguelike dove i giocatori esplorano dungeon generati proceduralmente, combattono mostri e raccolgono tesori.
+DungeonSlayer è un gioco di avventura roguelike dove i giocatori esplorano dungeon generati proceduralmente, combattono mostri e raccolgono tesori.
 
 ### Caratteristiche
 - Dungeon generati proceduralmente
 - Combattimenti a turni
 - Varietà di mostri e oggetti
-- (WIP) Sistema di progressione del personaggio
+- Sistema di progressione del personaggio
 
 ### Installazione
-Per ora usa VSCode e javac -d bin src/*.java java -cp bin App
+Per ora usa VSCode e `javac -d bin src/*.java` `java -cp bin App`
 
 ### Utilizzo
 Vedi Installazione
