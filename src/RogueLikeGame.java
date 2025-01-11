@@ -34,7 +34,7 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
     /** La posizione del giocatore */
     private int playerRow, playerCol;
     /** La salute massima del giocatore */
-    private int hpMax = 100;
+    private int hpMax = 10;
     /** La salute del giocatore */
     private int playerHealth = hpMax;
     /** L'armatura del giocatore */
@@ -644,9 +644,10 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
             }
 
             g.setFont(new Font("Monospaced", Font.BOLD, 42));
-            String message = gameOver ? "GAME OVER - LEVEL "+level : "GAME WIN";
-            int x = (cols * dim - 3 * metrics.stringWidth(message)) / 2;
-            int y = (rows * dim) / 2;
+            FontMetrics fm = g.getFontMetrics();
+            String message = gameOver ? "GAME OVER - LEVEL " + level : "GAME WIN";
+            int x = (getWidth() - fm.stringWidth(message)) / 2;
+            int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
             g.drawString(message, x, y);
         }
     }
