@@ -1,9 +1,14 @@
-public class Item {
+
+import java.io.Serializable;
+
+public class Item implements Serializable{
     /** Coordinate dell'oggetto */
     private int row, col;
     /** Tipo di oggetto */
+    @SuppressWarnings("FieldMayBeFinal")
     private char tipo; // 'A' = Armor, 'W' = Weapon, 'H' = Health
     /** Valore dell'oggetto */
+    @SuppressWarnings("FieldMayBeFinal")
     private int value;
 
     /**

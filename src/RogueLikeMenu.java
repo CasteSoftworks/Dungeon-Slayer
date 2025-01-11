@@ -1,11 +1,14 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.*;
 
 public class RogueLikeMenu extends JPanel {
+    @SuppressWarnings("FieldMayBeFinal")
     private JFrame frame;
+    @SuppressWarnings("FieldMayBeFinal")
     private int width;
+    @SuppressWarnings("FieldMayBeFinal")
     private int height;
 
     public RogueLikeMenu(JFrame frame, int width, int height) {
@@ -36,6 +39,7 @@ public class RogueLikeMenu extends JPanel {
         frame.repaint();
         gamePanel.start(gamePanel); // Avvia il ciclo del gioco
     }
+    
 
     @Override
     protected void paintComponent(Graphics g) {

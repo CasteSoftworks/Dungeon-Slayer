@@ -90,16 +90,12 @@ public class ItemManager {
      * @return valore dell'oggetto
      */
     private int determinaValoreOggetto(char tipoOggetto) {
-        switch (tipoOggetto) {
-            case 'H':
-                return random.nextInt(10) + 1; // Da 1 a 10 punti vita
-            case 'A':
-                return 1; // 1 punto armatura
-            case 'W':
-                return 1; // 1 punto danno
-            default:
-                return 0;
-        }
+        return switch (tipoOggetto) {
+            case 'H' -> random.nextInt(10) + 1;
+            case 'A' -> 1;
+            case 'W' -> 1;
+            default -> 0;
+        };
     }
     
 }

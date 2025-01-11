@@ -1,4 +1,7 @@
-public class Enemy {
+
+import java.io.Serializable;
+
+public class Enemy implements Serializable{
     /** Le coordinate del nemico */
     private int row, col;
     /** 

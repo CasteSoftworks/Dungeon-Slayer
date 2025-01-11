@@ -10,7 +10,7 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class RogueLikeGame extends JPanel implements KeyListener {
+public final class RogueLikeGame extends JPanel implements KeyListener {
     /** La larghezza del frame */
     private final int width;
     /** La altezza del frame */
@@ -25,7 +25,8 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     private final int dim=24;
 
     /** La mappa del gioco */
-    private final char[][] map;
+    @SuppressWarnings("FieldMayBeFinal")
+    private char[][] map;
 
     /** Inizializzazione di Random */
     private final Random random = new Random();
@@ -34,113 +35,119 @@ public class RogueLikeGame extends JPanel implements KeyListener {
     private int playerRow, playerCol;
     /** La salute massima del giocatore */
     private int hpMax = 100;
-        /** La salute del giocatore */
-        private int playerHealth = hpMax;
-        /** L'armatura del giocatore */
-        private int armor = 0;
-        /** Il danno inflitto dall'arma */
-        private int weaponDamage;
-        /** L'immagine del giocatore */
-        private BufferedImage playerImage;
-        /** L'espererienza del giocatore */
-        private int playerExp = 0;
-        /** Il livello del giocatore */
-        private int playerLevel = 1;
-        /** La quantità di punti vita curabili */
-        @SuppressWarnings("unused")
-        private final int healAmount = 0;
+    /** La salute del giocatore */
+    private int playerHealth = hpMax;
+    /** L'armatura del giocatore */
+    private int armor = 0;
+    /** Il danno inflitto dall'arma */
+    private int weaponDamage;
+    /** L'immagine del giocatore */
+    private BufferedImage playerImage;
+    /** L'espererienza del giocatore */
+    private int playerExp = 0;
+    /** Il livello del giocatore */
+    private int playerLevel = 1;
+    /** La quantità di punti vita curabili */
+    @SuppressWarnings("unused")
+    private final int healAmount = 0;
+    /** Il lettore musicale */
+    @SuppressWarnings("FieldMayBeFinal")
+    private AudioPlayer audioPlayer;
+    /** file di salvataggio */
     
-        /** La posizione del portale */
-        private int portalRow, portalCol;
-        /** L'immagine del portale */
-        private BufferedImage portalImage;
+    /** La posizione del portale */
+    private int portalRow, portalCol;
+    /** L'immagine del portale */
+    private BufferedImage portalImage;
     
-        /** La lista degli oggetti */
-        private List<Item> items = new ArrayList<>();
-        /** Inizializzazione del gestore oggetti */
-        private final ItemManager gestoreOggetti;
-        /** 
-         * Le immagini degli oggetti
-         * 
-         * <ul>
-         * <li>healthImage: l'immagine dell'oggetto salute</li>
-         * <li>armorImage: l'immagine dell'oggetto armatura</li>
-         * <li>weaponImage: l'immagine dell'oggetto arma</li>
-         * </ul>
-         */
-        private BufferedImage armorImage;
-        private BufferedImage weaponImage;
-        private BufferedImage healthImage;
+    /** La lista degli oggetti */
+    private List<Item> items = new ArrayList<>();
+    /** Inizializzazione del gestore oggetti */
+    private final ItemManager gestoreOggetti;
+    /** 
+     * Le immagini degli oggetti
+     * 
+     * <ul>
+     * <li>healthImage: l'immagine dell'oggetto salute</li>
+     * <li>armorImage: l'immagine dell'oggetto armatura</li>
+     * <li>weaponImage: l'immagine dell'oggetto arma</li>
+     * </ul>
+     */
+    private BufferedImage armorImage;
+    private BufferedImage weaponImage;
+    private BufferedImage healthImage;
+
+    /** La lista degli nemici */
+    private List<Enemy> enemies = new ArrayList<>();
+    /** Inizializzazione del gestore nemici */
+    private final EnemyManager gestoreNemici;
+    /** 
+     * Le immagini dei nemici
+     * 
+     * <ul>
+     * <li>zombieImage: l'immagine del nemico zombie</li>
+     * <li>skeletonImage: l'immagine del nemico scheletro</li>
+     * <li>vampireImage: l'immagine del nemico vampiro</li>
+     * </ul>
+     */
+    private BufferedImage zombieImage;
+    private BufferedImage skeletonImage;
+    private BufferedImage ghoulImage;
+    private BufferedImage wraithImage;
+    private BufferedImage vampireImage;
+    private BufferedImage lichImage;
+    private BufferedImage dragonImage;
+
+    /** La booleana che indica se il gioco è finito */
+    private boolean gameOver = false;
+    /** La booleana che indica se il gioco è vinto */
+    private boolean gameWin = false;
+    /** Il livello del gioco */
+    private int level = 1;        
     
-        /** La lista degli nemici */
-        private List<Enemy> enemies = new ArrayList<>();
-        /** Inizializzazione del gestore nemici */
-        private final EnemyManager gestoreNemici;
-        /** 
-         * Le immagini dei nemici
-         * 
-         * <ul>
-         * <li>zombieImage: l'immagine del nemico zombie</li>
-         * <li>skeletonImage: l'immagine del nemico scheletro</li>
-         * <li>vampireImage: l'immagine del nemico vampiro</li>
-         * </ul>
-         */
-        private BufferedImage zombieImage;
-        private BufferedImage skeletonImage;
-        private BufferedImage ghoulImage;
-        private BufferedImage wraithImage;
-        private BufferedImage vampireImage;
-        private BufferedImage lichImage;
-        private BufferedImage dragonImage;
+    /** Inizializzazione di Combat */
+    private RogueLikeCombat combat;
+    /** La booleana che indica se il giocatore è in combattimento */
+    @SuppressWarnings("unused")
+    private boolean inCombat = false;
     
-        /** La booleana che indica se il gioco è finito */
-        private boolean gameOver = false;
-        /** La booleana che indica se il gioco è vinto */
-        private boolean gameWin = false;
-        /** Il livello del gioco */
-        private int level = 1;
+    /**
+     * Costruttore di RogueLikeGame
+     * 
+     * @param width la larghezza del frame
+     * @param height l'altezza del frame
+     */
+    public RogueLikeGame(int width, int height) {
+        this.width = width;
+        this.height = height;
+        this.rows =  height/ dim;
+        this.cols =  width / dim;
     
+        this.map = new char[rows][cols];
+    
+        this.gestoreNemici = new EnemyManager();
+    
+        this.gestoreOggetti = new ItemManager();
+    
+        this.armor=0;
+        this.weaponDamage=1;
+        setPreferredSize(new Dimension(cols * dim, rows * dim));
+        setBackground(Color.BLACK);
+        setFocusable(true);
+        addKeyListener(this);
         
+        generateMap();
+        placePlayer();
+        placePortal();
+        placeItems();
+        placeEnemies();
+        loadImages();
+        
+        audioPlayer = new AudioPlayer();
+        audioPlayer.load("src/musica/musichetta_01.wav");
+        audioPlayer.play();
+    }
     
-        /** Inizializzazione di Combat */
-        private RogueLikeCombat combat;
-        /** La booleana che indica se il giocatore è in combattimento */
-        @SuppressWarnings("unused")
-        private boolean inCombat = false;
-    
-        /**
-         * Costruttore di RogueLikeGame
-         * 
-         * @param width la larghezza del frame
-         * @param height l'altezza del frame
-         */
-        public RogueLikeGame(int width, int height) {
-            this.width = width;
-            this.height = height;
-            this.rows =  height/ dim;
-            this.cols =  width / dim;
-    
-            this.map = new char[rows][cols];
-    
-            this.gestoreNemici = new EnemyManager();
-    
-            this.gestoreOggetti = new ItemManager();
-    
-            this.armor=0;
-            this.weaponDamage=1;
-    
-            setPreferredSize(new Dimension(cols * dim, rows * dim));
-            setBackground(Color.BLACK);
-            setFocusable(true);
-            addKeyListener(this);
-    
-            loadImages();
-            generateMap();
-            placePlayer();
-            placePortal();
-            placeItems();
-            placeEnemies();
-        }
     
         /**
          * Il metodo per caricare le immagini
@@ -626,6 +633,7 @@ public class RogueLikeGame extends JPanel implements KeyListener {
         g.drawString(levelText, width - levelTextWidth - 10, 20); // Mostra il livello in alto a destra considerando la dimensione del testo
 
         if (gameOver || gameWin) {
+
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, cols * dim, rows * dim);
 
@@ -666,7 +674,9 @@ public class RogueLikeGame extends JPanel implements KeyListener {
                     return;
                 }
             }
-            case KeyEvent.VK_ESCAPE -> System.exit(0);
+            case KeyEvent.VK_ESCAPE -> {
+                System.exit(0);
+            }
         }
 
         if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols && map[newRow][newCol] == '.') {
