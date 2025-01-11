@@ -35,6 +35,7 @@ public class ItemManager {
     public List<Item> generaOggetti(char[][] mappa, int livello) {
         items.clear();
         int maxOggetti = random.nextInt(1)+1; // Da 1 a 2 oggetti
+        
         for (int i = 0; i < maxOggetti; i++) {
             while (true) {
                 int row = random.nextInt(mappa.length);
