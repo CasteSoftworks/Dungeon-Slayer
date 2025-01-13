@@ -692,6 +692,7 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
                             playerLevel = 1;
                             armor = 0;
                             weaponDamage = 1;
+                            playerName = askPlayerName();
                             nextLevel();
                         } else if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                             System.exit(0);
@@ -756,6 +757,7 @@ public final class RogueLikeGame extends JPanel implements KeyListener {
         playerName = askPlayerName();
         gamePanel.requestFocusInWindow(); // Ensure the game panel has focus for key events
     }
+    
     /**
      * Il metodo per chiedere il nome del giocatore
      */
